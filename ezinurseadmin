@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezi Nurse Dashboard</title>
+    <style>
+        :root { --brand: #003B82; --accent: #00B9F2; --light: #f3f4f6; --error: #ef4444; --success: #10b981; }
+        body { font-family: 'Segoe UI', sans-serif; padding: 40px; background: #eef2f6; max-width: 900px; margin: 0 auto; color: #333; }
+        
+        h1 { color: var(--brand); text-align: center; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .card { background: white; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; position: relative; }
+        
+        label { display: block; font-weight: 600; margin-top: 15px; margin-bottom: 5px; color: #4b5563; font-size: 0.9rem; }
+        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: white; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--brand); ring: 2px solid var(--brand); }
+        
+        .btn-action { cursor: pointer; padding: 10px 16px; border: none; border-radius: 6px; font-weight: 600; font-size: 0.9rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-add-unit { background: var(--brand); color: white; width: 100%; justify-content: center; font-size: 1.1rem; padding: 15px; }
+        
+        /* Buttons Container */
+        .action-bar { display: flex; gap: 15px; margin-top: 40px; }
+
+        /* Notify Server Button */
+        .btn-notify { background: #2563eb; color: white; flex: 2; font-size: 1.2rem; padding: 20px; font-weight: 700; cursor: pointer; border: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .btn-notify:hover { background: #1d4ed8; transform: translateY(-2px); }
+        .btn-notify:disabled { background: #4b5563; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.7; }
+
+        /* Preview Button */
+        .btn-preview { background: var(--accent); color: white; flex: 1; font-size: 1.2rem; padding: 20px; font-weight: 700; cursor: pointer; border: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .btn-preview:hover { background: #0ea5e9; transform: translateY(-2px); }
+
+        /* Save/Load Buttons */
+        .project-controls { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-save { background: #059669; color: white; flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-load { background: #475569; color: white; flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-save:hover { background: #047857; }
+        .btn-load:hover { background: #334155; }
+
+        .res-toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+        .btn-outline { background: white; border: 1px solid #d1d5db; color: #374151; }
+        .btn-outline:hover { background: #f9fafb; border-color: #9ca3af; }
+        
+        .resource-row { display: flex; gap: 10px; margin-top: 10px; align-items: center; background: #f9fafb; padding: 10px; border-radius: 6px; }
+        .type-tag { font-size: 0.8rem; font-weight: bold; padding: 4px 8px; border-radius: 4px; min-width: 110px; text-align: center; }
+        
+        /* Dashboard Tags Colors */
+        .tag-video { background: #ede9fe; color: #5b21b6; }
+        .tag-detailed { background: #e0f2fe; color: #075985; }
+        .tag-lecture { background: #dbeafe; color: #1e40af; }
+        .tag-model { background: #fce7f3; color: #9d174d; }
+        .tag-imp-discussion { background: #fee2e2; color: #991b1b; } /* Red for Discussion */
+        .tag-imp-pdf { background: #ffedd5; color: #9a3412; } /* Orange for Imp PDF */
+        
+        .quiz-area { margin-top: 15px; background: #fffbeb; padding: 15px; border-radius: 8px; border: 1px solid #fcd34d; }
+        .btn-remove { position: absolute; top: 20px; right: 20px; background: #fee2e2; color: #991b1b; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; border: none; cursor: pointer; }
+
+        /* Status Toast */
+        #statusMessage {
+            position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; color: white;
+            font-weight: 600; display: none; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .status-error { background: var(--error); }
+        .status-success { background: var(--success); }
+
+        /* Preview Modal Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 0; display:flex; justify-content:center; overflow: hidden;}
+        .btn-close { background: var(--error); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .preview-iframe { width: 100%; height: 100%; border: none; background: white; }
+
+        /* Update Section Specific */
+        .update-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 600px) { .update-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div id="statusMessage"></div>
+
+    <h1>Ezi Nurse Course Dashboard</h1>
+
+    <input type="file" id="fileLoader" accept=".json" style="display: none;" onchange="loadProject(this)">
+
+    <div class="project-controls">
+        <button class="btn-save" onclick="saveProject()">💾 SAVE PROJECT</button>
+        <button class="btn-load" onclick="document.getElementById('fileLoader').click()">📂 LOAD PROJECT</button>
+    </div>
+
+    <input type="hidden" id="scriptUrl" value="https://script.google.com/macros/s/AKfycby04j5TYB_qCJBCoTZO3AjFRFwdteWcsxJEKCxBooufpLVq5dxWWoh0fLtj6URqMQH6/exec">
+
+    <div class="card">
+        <h2 style="margin-top:0; color:var(--brand);">Subject Details</h2>
+        <label>Subject Name</label>
+        <input type="text" id="courseName" placeholder="e.g., Applied Anatomy" value="Applied Anatomy">
+        <label>Syllabus Link (Google Drive)</label>
+        <input type="text" id="syllabusLink" placeholder="">
+    </div>
+
+    <div id="unitsContainer"></div>
+
+    <button class="btn-action btn-add-unit" onclick="addUnit()">+ Add New Unit</button>
+    
+    <div class="action-bar">
+        <button id="notifyBtn" class="btn-notify" onclick="startRelaySequence()">📡 NOTIFY SERVER (FULL COURSE)</button>
+        <button class="btn-preview" onclick="previewApp()">👁 PREVIEW SUBJECT</button>
+    </div>
+
+    <hr style="margin: 40px 0; border: none; border-top: 2px dashed #cbd5e1;">
+
+    <div class="card" style="border-top: 5px solid var(--accent);">
+        <h2 style="margin-top:0; color:var(--brand);">QUICK UPDATION</h2>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Use this form to push a single resource update/addition.</p>
+
+        <div class="update-grid">
+            <div>
+                <label>Semester / Year Name *</label>
+                <input type="text" id="updSemester" placeholder="e.g., Semester 1">
+            </div>
+            <div>
+                <label>Subject Title *</label>
+                <input type="text" id="updSubject" placeholder="e.g., Applied Anatomy">
+            </div>
+        </div>
+
+        <div class="update-grid">
+            <div>
+                <label>Unit Number</label>
+                <input type="text" id="updUnit" placeholder="e.g., 1">
+            </div>
+            <div>
+                <label>Topic Type</label>
+                <select id="updType">
+                    <option>📚 Detailed Note</option>
+                    <option>📝 Lecture Note</option>
+                    <option>🎥 Video</option>
+                    <option>🧊 3D Model</option>
+                    <option>🔥 Important Discussion</option>
+                    <option>📑 Important Questions PDF</option>
+                </select>
+            </div>
+        </div>
+
+        <label>Topic Title *</label>
+        <input type="text" id="updTopicTitle" placeholder="e.g., Structure of Heart">
+
+        <label>Resource URL *</label>
+        <input type="text" id="updUrl" placeholder="https://...">
+
+        <div class="action-bar" style="margin-top: 25px;">
+            <button id="updNotifyBtn" class="btn-notify" style="background:#059669;" onclick="sendUpdate()">📡 NOTIFY SERVER (UPDATE)</button>
+            <button class="btn-preview" style="background:#0d9488;" onclick="previewUpdate()">👁 PREVIEW URL</button>
+        </div>
+    </div>
+    <div id="preview-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div style="font-weight:700; color:var(--brand); font-size: 1.2rem;">Preview</div>
+            <button class="btn-close" onclick="closePreview()">Close Preview</button>
+        </div>
+        <div class="modal-body">
+            <iframe id="preview-frame" class="preview-iframe"></iframe>
+        </div>
+    </div>
+
+    <script>
+        let unitCounter = 0;
+
+        // Custom function to replace alerts
+        function showMessage(msg, type = 'error') {
+            const el = document.getElementById('statusMessage');
+            el.textContent = msg;
+            el.className = type === 'error' ? 'status-error' : 'status-success';
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 4000);
+        }
+
+        // Initialize with one unit for demonstration
+        window.onload = function() {
+            addUnit();
+        };
+
+        function addUnit() {
+            unitCounter++;
+            const div = document.createElement('div');
+            div.className = 'card unit-card';
+            div.id = `unit-${unitCounter}`;
+            div.innerHTML = `
+                <button class="btn-remove" onclick="removeUnit('${unitCounter}')">Remove Unit</button>
+                <h3 style="margin:0 0 15px 0; color:#374151;">Unit ${unitCounter}</h3>
+                
+                <label>Unit Title</label>
+                <input type="text" class="u-title" placeholder="">
+
+                <div id="resources-${unitCounter}"></div>
+
+                <div class="res-toolbar">
+                    <button class="btn-action btn-outline" onclick="addResource('${unitCounter}', 'detailed')">📚 Detailed Note</button>
+                    <button class="btn-action btn-outline" onclick="addResource('${unitCounter}', 'lecture')">📝 Lecture Note</button>
+                    <button class="btn-action btn-outline" onclick="addResource('${unitCounter}', 'video')">🎥 Video</button>
+                    <button class="btn-action btn-outline" onclick="addResource('${unitCounter}', 'model')">🧊 3D Model</button>
+                    
+                    <button class="btn-action btn-outline" style="border-color:#fca5a5; color:#991b1b;" onclick="addResource('${unitCounter}', 'imp-discussion')">🔥 Important Discussion</button>
+                    <button class="btn-action btn-outline" style="border-color:#fdba74; color:#9a3412;" onclick="addResource('${unitCounter}', 'imp-pdf')">📑 Important Questions PDF</button>
+                </div>
+
+                <div class="quiz-area">
+                    <label style="margin-top:0;">Quiz Questions (Bulk Paste)</label>
+                    <div style="font-size:0.85rem; color:#92400e; margin-bottom:8px;">
+                        <strong>Format:</strong> Question | Opt1 | Opt2 | Opt3 | Opt4 | CorrectAnswer(1-4)
+                    </div>
+                    <textarea class="u-quiz-data" rows="5" placeholder="Powerhouse of cell? | Nucleus | Mitochondria | Ribosome | Wall | 2"></textarea>
+                </div>
+            `;
+            document.getElementById('unitsContainer').appendChild(div);
+        }
+
+        function addResource(uId, type) {
+            const container = document.getElementById(`resources-${uId}`);
+            const div = document.createElement('div');
+            div.className = 'resource-row';
+            div.dataset.type = type;
+            
+            let labelText = type.charAt(0).toUpperCase() + type.slice(1);
+            if(type === 'detailed') labelText = "Detailed Note";
+            if(type === 'lecture') labelText = "Lecture Note";
+            if(type === 'imp-discussion') labelText = "Imp. Discussion";
+            if(type === 'imp-pdf') labelText = "Imp. Questions";
+            
+            const placeholder = type === 'model' ? '' : '';
+
+            div.innerHTML = `
+                <span class="type-tag tag-${type}">${labelText}</span>
+                <input type="text" class="res-title" placeholder="Title" style="flex:1;">
+                <input type="text" class="res-link" placeholder="${placeholder}" style="flex:2;">
+                <button onclick="this.parentElement.remove()" style="border:none; background:none; cursor:pointer;">❌</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeUnit(id) { document.getElementById(`unit-${id}`).remove(); }
+
+        // --- SAVE AND LOAD FUNCTIONALITY ---
+
+        function saveProject() {
+            try {
+                const projectData = {
+                    courseName: document.getElementById('courseName').value,
+                    syllabusLink: document.getElementById('syllabusLink').value,
+                    scriptUrl: document.getElementById('scriptUrl').value,
+                    units: []
+                };
+
+                // Iterate over units
+                const unitCards = document.getElementsByClassName('unit-card');
+                Array.from(unitCards).forEach(card => {
+                    const unitObj = {
+                        title: card.querySelector('.u-title').value,
+                        quiz: card.querySelector('.u-quiz-data').value,
+                        resources: []
+                    };
+
+                    // Iterate over resources in this unit
+                    const resRows = card.querySelectorAll('.resource-row');
+                    resRows.forEach(row => {
+                        unitObj.resources.push({
+                            type: row.dataset.type,
+                            title: row.querySelector('.res-title').value,
+                            link: row.querySelector('.res-link').value
+                        });
+                    });
+
+                    projectData.units.push(unitObj);
+                });
+
+                // Create blob and download
+                const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                // Filename includes course name
+                const safeName = projectData.courseName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                a.download = `ezi_nurse_${safeName || 'project'}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showMessage("Project Saved Successfully!", "success");
+
+            } catch (e) {
+                console.error(e);
+                showMessage("Failed to save project.", "error");
+            }
+        }
+
+        function loadProject(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    // 1. Restore Global fields
+                    if(data.courseName) document.getElementById('courseName').value = data.courseName;
+                    if(data.syllabusLink) document.getElementById('syllabusLink').value = data.syllabusLink;
+                    if(data.scriptUrl) document.getElementById('scriptUrl').value = data.scriptUrl;
+
+                    // 2. Clear existing units
+                    const container = document.getElementById('unitsContainer');
+                    container.innerHTML = '';
+                    unitCounter = 0; // Reset counter
+
+                    // 3. Rebuild Units
+                    if (data.units && Array.isArray(data.units)) {
+                        data.units.forEach(unitData => {
+                            addUnit(); // Creates a new empty unit
+                            
+                            // Get the unit we just created (unitCounter is currently at the max)
+                            const unitCard = document.getElementById(`unit-${unitCounter}`);
+                            
+                            // Restore Title and Quiz
+                            unitCard.querySelector('.u-title').value = unitData.title || '';
+                            unitCard.querySelector('.u-quiz-data').value = unitData.quiz || '';
+
+                            // Restore Resources
+                            if (unitData.resources && Array.isArray(unitData.resources)) {
+                                unitData.resources.forEach(res => {
+                                    addResource(unitCounter, res.type); // Add empty resource row
+                                    
+                                    // Get the row we just added (it's the last child of the resource container)
+                                    const resContainer = document.getElementById(`resources-${unitCounter}`);
+                                    const newRow = resContainer.lastElementChild;
+                                    
+                                    newRow.querySelector('.res-title').value = res.title || '';
+                                    newRow.querySelector('.res-link').value = res.link || '';
+                                });
+                            }
+                        });
+                    }
+
+                    showMessage("Project Loaded Successfully!", "success");
+
+                } catch (err) {
+                    console.error(err);
+                    showMessage("Error reading project file. Is it valid JSON?", "error");
+                }
+                
+                // Reset input so same file can be selected again if needed
+                input.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // --- HELPER: Process URL Input (Handles HTML pastes and Fixes Links) ---
+        function processUrlInput(input) {
+            let url = input.trim();
+            // 1. Extract src if it's an iframe or HTML tag
+            const srcMatch = url.match(/src=["']?([^"'\s>]+)["']?/);
+            if (srcMatch && srcMatch[1]) {
+                url = srcMatch[1];
+            }
+
+            // 2. Fix Google Drive
+            if (url.includes('drive.google.com')) {
+                url = url.replace(/\/view.*/, '/preview').replace(/\/edit.*/, '/preview');
+            }
+
+            // 3. Fix BioDigital
+            else if (url.includes('human.biodigital.com')) {
+                if (url.includes('/viewer/')) {
+                    url = url.replace('/viewer/', '/widget/');
+                } 
+                else if (url.includes('/view')) {
+                    url = url.replace('/view', '/widget');
+                }
+            }
+            
+            return url;
+        }
+
+        // --- RELAY ANIMATION & LOGIC ---
+
+        function startRelaySequence() {
+            const scriptUrl = document.getElementById('scriptUrl').value;
+            if(!scriptUrl) { 
+                showMessage("Server URL Missing. Please check the code configuration.", "error");
+                return; 
+            }
+
+            const btn = document.getElementById('notifyBtn');
+            btn.disabled = true;
+
+            let stage = 1;
+            btn.textContent = `Connecting to relay of Abinaya (${stage}/5)...`;
+
+            const relayTimer = setInterval(() => {
+                stage++;
+                if (stage <= 5) {
+                    btn.textContent = `Connecting to relay of Abinaya (${stage}/5)...`;
+                } else {
+                    clearInterval(relayTimer);
+                    btn.textContent = "Data Link Established. Sending...";
+                    executePayloadTransfer(); // Proceed to send
+                }
+            }, 500);
+        }
+
+        // --- PREVIEW LOGIC ---
+
+        function previewApp() {
+            const payload = constructAppHTML();
+            const modal = document.getElementById('preview-modal');
+            const iframe = document.getElementById('preview-frame');
+            
+            iframe.srcdoc = payload.html;
+            modal.style.display = 'flex';
+        }
+
+        function closePreview() {
+            document.getElementById('preview-modal').style.display = 'none';
+        }
+
+        // --- UPDATION SECTION LOGIC (FIXED) ---
+
+        function previewUpdate() {
+            const rawUrl = document.getElementById('updUrl').value;
+            if(!rawUrl) { showMessage("Please enter a URL to preview.", "error"); return; }
+            
+            const finalUrl = processUrlInput(rawUrl);
+
+            const modal = document.getElementById('preview-modal');
+            const iframe = document.getElementById('preview-frame');
+            iframe.removeAttribute('srcdoc'); // Clear previous doc content
+            iframe.src = finalUrl;
+            // Add allow attribute for BioDigital
+            iframe.allow = "xr-spatial-tracking";
+            modal.style.display = 'flex';
+        }
+
+        function sendUpdate() {
+            const scriptUrl = document.getElementById('scriptUrl').value;
+            
+            if(!scriptUrl) {
+               showMessage("Server URL Missing!", "error");
+               return;
+            }
+
+            // 1. Gather raw data and Process URL
+            const rawUrl = document.getElementById('updUrl').value;
+            const cleanUrl = processUrlInput(rawUrl);
+
+            const rawUnit = document.getElementById('updUnit').value.trim();
+
+            const updateData = {
+                type: 'SINGLE_UPDATE',
+                semester: document.getElementById('updSemester').value.trim(),
+                subject: document.getElementById('updSubject').value.trim(),
+                unit: rawUnit || "1", 
+                topicType: document.getElementById('updType').value,
+                topicTitle: document.getElementById('updTopicTitle').value.trim(),
+                url: cleanUrl
+            };
+
+            // 2. Validation
+            if(!updateData.semester || !updateData.subject || !updateData.url || !updateData.topicTitle) {
+                showMessage("Please fill in: Semester, Subject, Topic Title and URL.", "error");
+                return;
+            }
+
+            // 3. UI Feedback
+            const btn = document.getElementById('updNotifyBtn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = "Sending Update...";
+
+            // 4. Fetch
+            fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(updateData)
+            })
+            .then(() => {
+                showMessage("Update Sent Successfully!", "success");
+                btn.textContent = "✔ Sent!";
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }, 3000);
+            })
+            .catch(err => {
+                console.error(err);
+                showMessage("Update Failed: " + err.message, "error");
+                btn.disabled = false;
+                btn.textContent = originalText;
+            });
+        }
+
+        // --- CORE BUILD LOGIC ---
+
+        function constructAppHTML() {
+            const courseName = document.getElementById('courseName').value || "My Course";
+            const syllabusLink = document.getElementById('syllabusLink').value || "#";
+            const units = document.getElementsByClassName('unit-card');
+            
+            let unitsHTML = '';
+            let quizDataObj = {};
+
+            // HTML GENERATION LOGIC
+            Array.from(units).forEach((unit, index) => {
+                const uNum = index + 1;
+                const title = unit.querySelector('.u-title').value || `Unit ${uNum}`;
+                
+                // Build Resources
+                let resourcesHTML = '';
+                const rows = unit.querySelectorAll('.resource-row');
+                rows.forEach(row => {
+                    const rType = row.dataset.type;
+                    const rTitle = row.querySelector('.res-title').value || "Untitled Resource";
+                    let rLinkInput = row.querySelector('.res-link').value || "#";
+                    
+                    // Use common link processor
+                    const rLink = processUrlInput(rLinkInput);
+                    
+                    if(rType === 'detailed') {
+                        resourcesHTML += `<div class="resource-btn notes" onclick="openResource('notes', '${rLink}', '${rTitle}')"><span class="icon">📚</span><span>${rTitle}</span></div>`;
+                    } else if (rType === 'lecture') {
+                        resourcesHTML += `<div class="resource-btn notes" onclick="openResource('notes', '${rLink}', '${rTitle}')"><span class="icon">📝</span><span>${rTitle}</span></div>`;
+                    } else if (rType === 'video') {
+                        resourcesHTML += `<div class="resource-btn video" onclick="openResource('video', '${rLink}', '${rTitle}')"><span class="icon video-icon">▶️</span><span>${rTitle}</span></div>`;
+                    } else if (rType === 'model') {
+                        resourcesHTML += `<div class="resource-btn model" onclick="openResource('model', '${rLink}', '${rTitle}')"><span class="icon model-icon">🧊</span><span>${rTitle}</span></div>`;
+                    } else if (rType === 'imp-discussion') {
+                        resourcesHTML += `<div class="resource-btn imp-discussion" onclick="openResource('video', '${rLink}', '${rTitle}')"><span class="icon">🔥</span><span>${rTitle}</span></div>`;
+                    } else if (rType === 'imp-pdf') {
+                        resourcesHTML += `<div class="resource-btn imp-pdf" onclick="openResource('notes', '${rLink}', '${rTitle}')"><span class="icon">📑</span><span>${rTitle}</span></div>`;
+                    }
+                });
+
+                // Parse Quiz
+                const rawQuiz = unit.querySelector('.u-quiz-data').value.trim();
+                let parsedQuestions = [];
+                if(rawQuiz) {
+                    rawQuiz.split('\n').forEach(line => {
+                        if(line.trim() === '') return;
+                        const parts = line.split('|').map(p => p.trim());
+                        if(parts.length >= 6) {
+                            parsedQuestions.push({ q: parts[0], o: [parts[1], parts[2], parts[3], parts[4]], a: parseInt(parts[5]) - 1 });
+                        }
+                    });
+                }
+                quizDataObj[uNum] = parsedQuestions;
+
+                if(parsedQuestions.length > 0) {
+                    resourcesHTML += `<div class="resource-btn quiz" onclick="startQuiz(${uNum})"><span class="icon quiz-icon">✍️</span><span>Take Unit ${uNum} Quiz</span></div>`;
+                }
+
+                unitsHTML += `
+                <div class="unit-container">
+                    <div class="unit-header" role="button" aria-expanded="false" onclick="toggleUnit(this)">
+                        UNIT ${uNum} - ${title.toUpperCase()} <span>🔽</span>
+                    </div>
+                    <div class="unit-content"><div class="subsection">${resourcesHTML}</div></div>
+                </div>`;
+            });
+
+            // The Payload Template
+            const finalHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${courseName}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #003B82; --accent: #00B9F2; --gray-50: #f9fafb; --gray-200: #e5e7eb; --gray-900: #111827;
+            --danger: #ef4444; --success: #10b981; --warning: #f59e0b;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: white; color: var(--gray-900); padding: 24px; max-width: 1000px; margin: 0 auto; }
+        .syllabus-btn { display: block; width: 100%; padding: 18px 24px; margin: 12px 0; background: white; color: var(--brand); border: 2px solid var(--brand); font-weight: 700; font-size: 16px; text-align: center; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; text-decoration: none; }
+        .syllabus-btn:hover { background: var(--gray-50); transform: translateY(-1px); }
+        .unit-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 18px 24px; margin: 16px 0; background: var(--brand); color: white; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .unit-header:hover { background: #002d63; }
+        .unit-content { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+        .unit-content.active { padding: 24px 12px; max-height: none; }
+        .subsection { padding: 20px; background: white; border-radius: 12px; border: 1px solid var(--gray-200); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .resource-btn { display: flex; width: 100%; padding: 14px 18px; margin: 6px 0; background: var(--gray-50); border-radius: 8px; font-weight: 500; border: 1px solid var(--gray-200); cursor: pointer; gap: 12px; transition: 0.2s; align-items: center; }
+        
+        /* EXISTING BUTTON STYLES */
+        .resource-btn.notes { background: #f0f9ff; border-color: #bae6fd; color: #085d8c; }
+        .resource-btn.video { background: #f5f3ff; border-color: #d8b4fe; color: #5a32a6; }
+        .resource-btn.quiz { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .resource-btn.model { background: #fdf4ff; border-color: #f0abfc; color: #86198f; }
+
+        /* NEW BUTTON STYLES FOR APP */
+        .resource-btn.imp-discussion { background: #fef2f2; border-color: #fecaca; color: #b91c1c; } /* Light Red Background */
+        .resource-btn.imp-pdf { background: #fff7ed; border-color: #fed7aa; color: #c2410c; } /* Light Orange Background */
+        
+        .resource-btn:hover { transform: translateY(-1px); filter: brightness(0.98); }
+        .icon { font-size: 1.3rem; min-width: 24px; color: var(--accent); }
+        .icon.video-icon { color: #8b5cf6; } .icon.quiz-icon { color: #f59e0b; } .icon.model-icon { color: #d946ef; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; }
+        .modal-header { height: 60px; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; }
+        .btn-close { background: var(--danger); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-body { flex: 1; background: #f3f4f6; position: relative; padding: 20px; display:flex; justify-content:center; overflow-y: auto;}
+        .iframe-res { width: 100%; height: 100%; border: none; background: white; }
+        .quiz-container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; margin-bottom: 50px; }
+        .quiz-option { padding: 12px 15px; border: 2px solid var(--gray-200); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background: #f9fafb; border-color: var(--brand); }
+        .quiz-option.correct { background: #d1fae5; border-color: var(--success); color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .btn-quiz { background: var(--brand); color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin-top: 20px; cursor: pointer;}
+        @media (max-width: 768px) { body { padding: 16px; } .quiz-container { padding: 15px; } }
+    </style>
+</head>
+<body>
+    <a class="syllabus-btn" href="${syllabusLink}" target="_blank">📄 DOWNLOAD SYLLABUS</a>
+    <div id="units">${unitsHTML}</div>
+    <div id="app-modal" class="modal-overlay">
+        <div class="modal-header">
+            <div id="modal-title" style="font-weight:700; color:var(--brand);">Resource</div>
+            <button class="btn-close" onclick="closeModal()">Close X</button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+    </div>
+    <script>
+        const QUIZ_DATA = ${JSON.stringify(quizDataObj)};
+        let score = 0;
+        function toggleUnit(header) {
+            const content = header.nextElementSibling;
+            header.setAttribute('aria-expanded', header.getAttribute('aria-expanded') !== 'true');
+            content.classList.toggle('active');
+        }
+        function openResource(type, url, title) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = title;
+            modal.style.display = 'flex';
+            
+            // Clean URL Logic (Fallback/Runtime)
+            let finalUrl = url;
+            if (url.includes('drive.google.com')) { 
+                finalUrl = url.replace(/\\/view.*/, '/preview').replace(/\\/edit.*/, '/preview'); 
+            }
+            else if (url.includes('human.biodigital.com')) { 
+                 if (url.includes('/viewer/')) finalUrl = url.replace('/viewer/', '/widget/');
+                 else finalUrl = url.replace('/view', '/widget'); 
+            }
+            
+            body.innerHTML = '<iframe class="iframe-res" src="' + finalUrl + '" width="100%" height="100%" allow="xr-spatial-tracking" allowfullscreen></iframe>';
+        }
+        function startQuiz(unitId) {
+            score = 0;
+            const questions = QUIZ_DATA[unitId];
+            if(!questions || questions.length === 0) { alert('No questions found.'); return; }
+            let html = '<div class="quiz-container"><h2 style="color:var(--brand); margin-top:0;">Unit ' + unitId + ' Quiz</h2>';
+            html += '<div id="score-display" style="background:var(--brand); color:white; padding:5px 15px; border-radius:20px; display:inline-block; font-weight:700; margin-bottom:20px;">Score: 0 / ' + questions.length + '</div>';
+            questions.forEach((q, index) => {
+                html += '<div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">';
+                html += '<p style="font-weight:600; font-size:1.1rem; margin-bottom:15px;">' + (index + 1) + '. ' + q.q + '</p>';
+                q.o.forEach((opt, optIndex) => {
+                    html += '<div class="quiz-option" onclick="checkAnswer(this, ' + unitId + ', ' + optIndex + ', ' + q.a + ')">' + opt + '</div>';
+                });
+                html += '</div>';
+            });
+            html += '<button class="btn-quiz" onclick="closeModal()">Close Quiz</button></div>';
+            document.getElementById('modal-body').innerHTML = html;
+            document.getElementById('modal-title').textContent = 'Unit ' + unitId + ' Quiz';
+            document.getElementById('app-modal').style.display = 'flex';
+        }
+        function checkAnswer(element, unitId, selectedIndex, correctIndex) {
+            if (element.parentElement.querySelector('.correct') || element.parentElement.querySelector('.wrong')) return;
+            if (selectedIndex === correctIndex) {
+                element.classList.add('correct'); score++;
+            } else {
+                element.classList.add('wrong'); element.parentElement.children[correctIndex + 1].classList.add('correct');
+            }
+            document.getElementById('score-display').textContent = 'Score: ' + score + ' / ' + QUIZ_DATA[unitId].length;
+        }
+        function closeModal() { document.getElementById('app-modal').style.display = 'none'; document.getElementById('modal-body').innerHTML = ""; }
+    <\/script>
+</body>
+</html>`;
+
+            return { html: finalHTML, courseName: courseName };
+        }
+
+        function executePayloadTransfer() {
+            const scriptUrl = document.getElementById('scriptUrl').value;
+            const payload = constructAppHTML();
+            
+            // SEND TO SERVER
+            fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' }, 
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                const btn = document.getElementById('notifyBtn');
+                btn.textContent = "✔ Relay Successful! Check Inbox.";
+                showMessage("Relay Successful! The data was sent successfully.", "success");
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.textContent = "📡 NOTIFY SERVER (FULL COURSE)";
+                }, 5000);
+            })
+            .catch(err => {
+                showMessage("Server Connection Failed: " + err, "error");
+                document.getElementById('notifyBtn').disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
