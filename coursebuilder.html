@@ -38,6 +38,16 @@
         .btn-save:hover { background: #047857; }
         .btn-load:hover { background: #334155; }
 
+        /* Logout Button */
+        .btn-logout { 
+            position: absolute; top: 20px; left: 20px; 
+            background: #ef4444; color: white; 
+            padding: 8px 16px; border-radius: 6px; 
+            border: none; font-weight: 600; cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-logout:hover { background: #dc2626; }
+
         .res-toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
         .btn-outline { background: white; border: 1px solid #d1d5db; color: #374151; }
         .btn-outline:hover { background: #f9fafb; border-color: #9ca3af; }
@@ -50,8 +60,8 @@
         .tag-detailed { background: #e0f2fe; color: #075985; }
         .tag-lecture { background: #dbeafe; color: #1e40af; }
         .tag-model { background: #fce7f3; color: #9d174d; }
-        .tag-imp-discussion { background: #fee2e2; color: #991b1b; } /* Red for Discussion */
-        .tag-imp-pdf { background: #ffedd5; color: #9a3412; } /* Orange for Imp PDF */
+        .tag-imp-discussion { background: #fee2e2; color: #991b1b; } 
+        .tag-imp-pdf { background: #ffedd5; color: #9a3412; } 
         
         .quiz-area { margin-top: 15px; background: #fffbeb; padding: 15px; border-radius: 8px; border: 1px solid #fcd34d; }
         .btn-remove { position: absolute; top: 20px; right: 20px; background: #fee2e2; color: #991b1b; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; border: none; cursor: pointer; }
@@ -108,7 +118,7 @@
             color: var(--error); text-align: center; margin-top: 15px;
             font-size: 0.9rem; min-height: 20px;
         }
-        #dashboard-wrapper { display: none; } /* Initially Hidden */
+        #dashboard-wrapper { display: none; position: relative; } /* Initially Hidden */
     </style>
 </head>
 <body>
@@ -132,6 +142,8 @@
     </div>
 
     <div id="dashboard-wrapper">
+        <button class="btn-logout" onclick="signOut()">← Sign Out</button>
+
         <div id="statusMessage"></div>
 
         <h1>Ezi Nurse Course Dashboard</h1>
@@ -228,6 +240,17 @@
             "abin.ezinurse@gmail.com": "Abin@123"
         };
 
+        // 1. CHECK SESSION ON LOAD
+        function checkSession() {
+            const savedUser = localStorage.getItem("ezi_user_session");
+            if (savedUser && AUTHORIZED_USERS[savedUser]) {
+                // User is already logged in
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('dashboard-wrapper').style.display = 'block';
+            }
+        }
+
+        // 2. ATTEMPT LOGIN & SAVE SESSION
         function attemptLogin() {
             const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
@@ -235,14 +258,23 @@
 
             if (AUTHORIZED_USERS[email] && AUTHORIZED_USERS[email] === pass) {
                 // Successful Login
+                
+                // SAVE SESSION TO LOCAL STORAGE
+                localStorage.setItem("ezi_user_session", email);
+
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('dashboard-wrapper').style.display = 'block';
             } else {
                 // Failed Login
                 errorDiv.textContent = "Invalid Email or Password.";
-                // Clear password field
                 document.getElementById('loginPass').value = '';
             }
+        }
+
+        // 3. SIGN OUT FUNCTION
+        function signOut() {
+            localStorage.removeItem("ezi_user_session");
+            location.reload(); // Reload page to show login screen
         }
 
         function togglePasswordVisibility() {
@@ -251,10 +283,10 @@
             
             if (passInput.type === "password") {
                 passInput.type = "text";
-                toggleIcon.textContent = "🙈"; // Change to closed eye/hide symbol
+                toggleIcon.textContent = "🙈"; 
             } else {
                 passInput.type = "password";
-                toggleIcon.textContent = "👁️"; // Change back to open eye
+                toggleIcon.textContent = "👁️"; 
             }
         }
 
@@ -279,9 +311,10 @@
             setTimeout(() => { el.style.display = 'none'; }, 4000);
         }
 
-        // Initialize with one unit for demonstration
+        // Initialize logic
         window.onload = function() {
-            addUnit();
+            checkSession(); // Check login status immediately
+            addUnit();      // Initialize dashboard
         };
 
         function addUnit() {
