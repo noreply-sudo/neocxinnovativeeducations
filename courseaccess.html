@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezi Nurse Admin</title>
+    <style>
+        :root { --brand: #003B82; --accent: #00B9F2; --error: #ef4444; --success: #10b981; }
+        body { font-family: 'Segoe UI', sans-serif; padding: 40px; background: #eef2f6; max-width: 800px; margin: 0 auto; color: #333; }
+        h1 { color: var(--brand); text-align: center; margin-bottom: 10px; text-transform: uppercase; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+        .card { background: white; padding: 30px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h2 { margin-top: 0; color: var(--brand); border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+        label { display: block; font-weight: 600; margin-bottom: 5px; color: #4b5563; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .btn { cursor: pointer; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; width: 100%; transition: 0.2s; }
+        .btn-submit { background: var(--brand); color: white; margin-top: 20px; }
+        .btn-submit:hover { background: #002d63; }
+        .btn-report { background: white; border: 1px solid var(--brand); color: var(--brand); margin-bottom:10px; }
+        .btn-report:hover { background: #f0f9ff; }
+        .btn-report.alert { border-color: var(--error); color: var(--error); }
+        .reports-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        #toast { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 600; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; }
+        .loading { opacity: 0.6; pointer-events: none; }
+    </style>
+</head>
+<body>
 
+    <input type="hidden" id="scriptUrl" value="https://script.google.com/macros/s/AKfycbxmvNIWeun8uUVJhzctvzZtj8YDafsbA87U29TbCcrbZJON7DgxY0XsJzThZaM-Ib3Lmg/exec">
+
+    <div id="toast"></div>
+    <h1>Ezi Nurse</h1>
+    <div class="subtitle">User Management Dashboard</div>
+
+    <div class="card">
+        <h2>Grant User Access</h2>
+        <form id="addForm">
+            <div class="form-grid">
+                <div><label>User Email</label><input type="email" id="email" required></div>
+                <div><label>Course Name</label><input type="text" id="course" placeholder="e.g. Applied Anatomy" required></div>
+            </div>
+            <div class="form-grid" style="margin-top: 15px;">
+                <div><label>Date of Expiry</label><input type="date" id="expiry" required></div>
+                <div><label>Verified By</label><input type="text" id="verifier" required></div>
+            </div>
+            <button type="submit" class="btn btn-submit">✔ SUBMIT & NOTIFY</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Data Reports</h2>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Reports are sent to duraivelsamuel@gmail.com</p>
+        <div class="reports-grid">
+            <button class="btn btn-report" onclick="sendData('REPORT', 'ALL')">📂 Request All Data</button>
+            <button class="btn btn-report" onclick="sendData('REPORT', 'PAID')">💰 Request Paid Users</button>
+            <button class="btn btn-report alert" onclick="sendData('REPORT', 'EXPIRED')">⚠️ Request Expired Users</button>
+        </div>
+        <div style="margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">
+            <label>Request by Date:</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="date" id="reportDate">
+                <button class="btn btn-report" onclick="requestDateReport()">📅 Request</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showToast(msg, isError) {
+            const el = document.getElementById('toast');
+            el.innerText = msg;
+            el.style.background = isError ? '#ef4444' : '#10b981';
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 4000);
+        }
+
+        // --- THE CONNECTOR FUNCTION ---
+        function sendData(actionType, detail1, detail2) {
+            const url = document.getElementById('scriptUrl').value;
+            if(!url) { showToast("Error: Script URL missing in code.", true); return; }
+
+            document.body.classList.add('loading');
+            showToast("Connecting to server...", false);
+
+            // Construct payload based on action
+            let payload = {};
+            if(actionType === 'ADD_USER') {
+                payload = { action: "ADD_USER", payload: detail1 };
+            } else if (actionType === 'REPORT') {
+                payload = { action: "REPORT", reportType: detail1, date: detail2 };
+            }
+
+            // Standard fetch request for Web Apps
+            fetch(url, {
+                method: "POST",
+                mode: "no-cors", // Essential for Google Scripts
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                document.body.classList.remove('loading');
+                if(actionType === 'ADD_USER') {
+                    showToast("User Added! Check Email.", false);
+                    document.getElementById('addForm').reset();
+                } else {
+                    showToast("Report Sent to Email!", false);
+                }
+            })
+            .catch(err => {
+                document.body.classList.remove('loading');
+                showToast("Connection Error: " + err, true);
+            });
+        }
+
+        // --- EVENT LISTENERS ---
+        document.getElementById('addForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                email: document.getElementById('email').value,
+                course: document.getElementById('course').value,
+                expiry: document.getElementById('expiry').value,
+                verifier: document.getElementById('verifier').value
+            };
+            sendData('ADD_USER', data);
+        });
+
+        function requestDateReport() {
+            const d = document.getElementById('reportDate').value;
+            if(!d) { showToast("Select a date first.", true); return; }
+            sendData('REPORT', 'BY_DATE', d);
+        }
+    </script>
+</body>
+</html>
