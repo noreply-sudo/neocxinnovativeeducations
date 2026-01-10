@@ -13,7 +13,7 @@
         .card { background: white; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; position: relative; }
         
         label { display: block; font-weight: 600; margin-top: 15px; margin-bottom: 5px; color: #4b5563; font-size: 0.9rem; }
-        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: white; }
+        input[type="text"], input[type="password"], input[type="email"], textarea, select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; box-sizing: border-box; background: white; }
         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--brand); ring: 2px solid var(--brand); }
         
         .btn-action { cursor: pointer; padding: 10px 16px; border: none; border-radius: 6px; font-weight: 600; font-size: 0.9rem; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
@@ -76,97 +76,198 @@
         /* Update Section Specific */
         .update-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media (max-width: 600px) { .update-grid { grid-template-columns: 1fr; } }
+
+        /* --- LOGIN PAGE STYLES --- */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: #eef2f6; z-index: 9999; display: flex;
+            align-items: center; justify-content: center;
+        }
+        .login-card {
+            background: white; padding: 40px; border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
+            border: 1px solid #e5e7eb;
+        }
+        .login-title {
+            color: var(--brand); text-align: center; margin-bottom: 30px;
+            font-size: 1.8rem; font-weight: 700; text-transform: uppercase;
+        }
+        .btn-login {
+            background: var(--brand); color: white; width: 100%;
+            padding: 14px; border: none; border-radius: 8px;
+            font-weight: 600; font-size: 1.1rem; cursor: pointer;
+            margin-top: 20px; transition: 0.3s;
+        }
+        .btn-login:hover { background: #002d63; }
+        .password-wrapper { position: relative; }
+        .toggle-password {
+            position: absolute; right: 15px; top: 43px; cursor: pointer;
+            color: #6b7280; user-select: none;
+        }
+        .login-error {
+            color: var(--error); text-align: center; margin-top: 15px;
+            font-size: 0.9rem; min-height: 20px;
+        }
+        #dashboard-wrapper { display: none; } /* Initially Hidden */
     </style>
 </head>
 <body>
 
-    <div id="statusMessage"></div>
-
-    <h1>Ezi Nurse Course Dashboard</h1>
-
-    <input type="file" id="fileLoader" accept=".json" style="display: none;" onchange="loadProject(this)">
-
-    <div class="project-controls">
-        <button class="btn-save" onclick="saveProject()">💾 SAVE PROJECT</button>
-        <button class="btn-load" onclick="document.getElementById('fileLoader').click()">📂 LOAD PROJECT</button>
-    </div>
-
-    <input type="hidden" id="scriptUrl" value="https://script.google.com/macros/s/AKfycby04j5TYB_qCJBCoTZO3AjFRFwdteWcsxJEKCxBooufpLVq5dxWWoh0fLtj6URqMQH6/exec">
-
-    <div class="card">
-        <h2 style="margin-top:0; color:var(--brand);">Subject Details</h2>
-        <label>Subject Name</label>
-        <input type="text" id="courseName" placeholder="e.g., Applied Anatomy" value="Applied Anatomy">
-        <label>Syllabus Link (Google Drive)</label>
-        <input type="text" id="syllabusLink" placeholder="">
-    </div>
-
-    <div id="unitsContainer"></div>
-
-    <button class="btn-action btn-add-unit" onclick="addUnit()">+ Add New Unit</button>
-    
-    <div class="action-bar">
-        <button id="notifyBtn" class="btn-notify" onclick="startRelaySequence()">📡 NOTIFY SERVER (FULL COURSE)</button>
-        <button class="btn-preview" onclick="previewApp()">👁 PREVIEW SUBJECT</button>
-    </div>
-
-    <hr style="margin: 40px 0; border: none; border-top: 2px dashed #cbd5e1;">
-
-    <div class="card" style="border-top: 5px solid var(--accent);">
-        <h2 style="margin-top:0; color:var(--brand);">QUICK UPDATION</h2>
-        <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Use this form to push a single resource update/addition.</p>
-
-        <div class="update-grid">
-            <div>
-                <label>Semester / Year Name *</label>
-                <input type="text" id="updSemester" placeholder="e.g., Semester 1">
+    <div id="login-overlay">
+        <div class="login-card">
+            <div class="login-title">Ezi Nurse Login</div>
+            
+            <label>Email ID</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email">
+            
+            <div class="password-wrapper">
+                <label>Password</label>
+                <input type="password" id="loginPass" placeholder="Enter password">
+                <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
             </div>
-            <div>
-                <label>Subject Title *</label>
-                <input type="text" id="updSubject" placeholder="e.g., Applied Anatomy">
-            </div>
-        </div>
 
-        <div class="update-grid">
-            <div>
-                <label>Unit Number</label>
-                <input type="text" id="updUnit" placeholder="e.g., 1">
-            </div>
-            <div>
-                <label>Topic Type</label>
-                <select id="updType">
-                    <option>📚 Detailed Note</option>
-                    <option>📝 Lecture Note</option>
-                    <option>🎥 Video</option>
-                    <option>🧊 3D Model</option>
-                    <option>🔥 Important Discussion</option>
-                    <option>📑 Important Questions PDF</option>
-                </select>
-            </div>
-        </div>
-
-        <label>Topic Title *</label>
-        <input type="text" id="updTopicTitle" placeholder="e.g., Structure of Heart">
-
-        <label>Resource URL *</label>
-        <input type="text" id="updUrl" placeholder="https://...">
-
-        <div class="action-bar" style="margin-top: 25px;">
-            <button id="updNotifyBtn" class="btn-notify" style="background:#059669;" onclick="sendUpdate()">📡 NOTIFY SERVER (UPDATE)</button>
-            <button class="btn-preview" style="background:#0d9488;" onclick="previewUpdate()">👁 PREVIEW URL</button>
+            <button class="btn-login" onclick="attemptLogin()">SIGN IN</button>
+            <div id="loginError" class="login-error"></div>
         </div>
     </div>
-    <div id="preview-modal" class="modal-overlay">
-        <div class="modal-header">
-            <div style="font-weight:700; color:var(--brand); font-size: 1.2rem;">Preview</div>
-            <button class="btn-close" onclick="closePreview()">Close Preview</button>
+
+    <div id="dashboard-wrapper">
+        <div id="statusMessage"></div>
+
+        <h1>Ezi Nurse Course Dashboard</h1>
+
+        <input type="file" id="fileLoader" accept=".json" style="display: none;" onchange="loadProject(this)">
+
+        <div class="project-controls">
+            <button class="btn-save" onclick="saveProject()">💾 SAVE PROJECT</button>
+            <button class="btn-load" onclick="document.getElementById('fileLoader').click()">📂 LOAD PROJECT</button>
         </div>
-        <div class="modal-body">
-            <iframe id="preview-frame" class="preview-iframe"></iframe>
+
+        <input type="hidden" id="scriptUrl" value="https://script.google.com/macros/s/AKfycby04j5TYB_qCJBCoTZO3AjFRFwdteWcsxJEKCxBooufpLVq5dxWWoh0fLtj6URqMQH6/exec">
+
+        <div class="card">
+            <h2 style="margin-top:0; color:var(--brand);">Subject Details</h2>
+            <label>Subject Name</label>
+            <input type="text" id="courseName" placeholder="e.g., Applied Anatomy" value="Applied Anatomy">
+            <label>Syllabus Link (Google Drive)</label>
+            <input type="text" id="syllabusLink" placeholder="">
+        </div>
+
+        <div id="unitsContainer"></div>
+
+        <button class="btn-action btn-add-unit" onclick="addUnit()">+ Add New Unit</button>
+        
+        <div class="action-bar">
+            <button id="notifyBtn" class="btn-notify" onclick="startRelaySequence()">📡 NOTIFY SERVER (FULL COURSE)</button>
+            <button class="btn-preview" onclick="previewApp()">👁 PREVIEW SUBJECT</button>
+        </div>
+
+        <hr style="margin: 40px 0; border: none; border-top: 2px dashed #cbd5e1;">
+
+        <div class="card" style="border-top: 5px solid var(--accent);">
+            <h2 style="margin-top:0; color:var(--brand);">QUICK UPDATION</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Use this form to push a single resource update/addition.</p>
+
+            <div class="update-grid">
+                <div>
+                    <label>Semester / Year Name *</label>
+                    <input type="text" id="updSemester" placeholder="e.g., Semester 1">
+                </div>
+                <div>
+                    <label>Subject Title *</label>
+                    <input type="text" id="updSubject" placeholder="e.g., Applied Anatomy">
+                </div>
+            </div>
+
+            <div class="update-grid">
+                <div>
+                    <label>Unit Number</label>
+                    <input type="text" id="updUnit" placeholder="e.g., 1">
+                </div>
+                <div>
+                    <label>Topic Type</label>
+                    <select id="updType">
+                        <option>📚 Detailed Note</option>
+                        <option>📝 Lecture Note</option>
+                        <option>🎥 Video</option>
+                        <option>🧊 3D Model</option>
+                        <option>🔥 Important Discussion</option>
+                        <option>📑 Important Questions PDF</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Topic Title *</label>
+            <input type="text" id="updTopicTitle" placeholder="e.g., Structure of Heart">
+
+            <label>Resource URL *</label>
+            <input type="text" id="updUrl" placeholder="https://...">
+
+            <div class="action-bar" style="margin-top: 25px;">
+                <button id="updNotifyBtn" class="btn-notify" style="background:#059669;" onclick="sendUpdate()">📡 NOTIFY SERVER (UPDATE)</button>
+                <button class="btn-preview" style="background:#0d9488;" onclick="previewUpdate()">👁 PREVIEW URL</button>
+            </div>
+        </div>
+        <div id="preview-modal" class="modal-overlay">
+            <div class="modal-header">
+                <div style="font-weight:700; color:var(--brand); font-size: 1.2rem;">Preview</div>
+                <button class="btn-close" onclick="closePreview()">Close Preview</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="preview-frame" class="preview-iframe"></iframe>
+            </div>
         </div>
     </div>
 
     <script>
+        // --- LOGIN LOGIC START ---
+        
+        // Hardcoded Credentials Map
+        const AUTHORIZED_USERS = {
+            "glory.ezinurse@gmail.com": "Glory@123",
+            "abin.ezinurse@gmail.com": "Abin@123"
+        };
+
+        function attemptLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const errorDiv = document.getElementById('loginError');
+
+            if (AUTHORIZED_USERS[email] && AUTHORIZED_USERS[email] === pass) {
+                // Successful Login
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('dashboard-wrapper').style.display = 'block';
+            } else {
+                // Failed Login
+                errorDiv.textContent = "Invalid Email or Password.";
+                // Clear password field
+                document.getElementById('loginPass').value = '';
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('loginPass');
+            const toggleIcon = document.querySelector('.toggle-password');
+            
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                toggleIcon.textContent = "🙈"; // Change to closed eye/hide symbol
+            } else {
+                passInput.type = "password";
+                toggleIcon.textContent = "👁️"; // Change back to open eye
+            }
+        }
+
+        // Allow 'Enter' key to submit login
+        document.getElementById('loginPass').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                attemptLogin();
+            }
+        });
+
+        // --- LOGIN LOGIC END ---
+
+
         let unitCounter = 0;
 
         // Custom function to replace alerts
