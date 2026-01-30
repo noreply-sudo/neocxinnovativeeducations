@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Revision Test | Premium NCLEX-RN Preparation by Abinaya Samuel</title>
+    <meta name="description" content="Ace your NCLEX-RN with Revision Test by Abinaya Samuel. Premium flashcards, NGN simulated tests, and comprehensive study materials.">
+    <meta name="keywords" content="NCLEX-RN, Nursing Exam, NGN, Next Generation NCLEX, Abinaya Samuel">
+    <meta name="author" content="Abinaya Samuel">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        loyolaPurple: '#4B0082',
+                        loyolaDarkPurple: '#2E0050',
+                        loyolaYellow: '#FFD700',
+                        loyolaLight: '#F3E5F5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Merriweather', serif; }
+        
+        /* Hero Image Fixes */
+        .hero-section {
+            background-image: url('hero.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        @media (min-width: 768px) { .hero-section { background-attachment: fixed; } }
+        @media (max-width: 767px) { .hero-section { background-attachment: scroll; } }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(46, 0, 80, 0.1) 0%, rgba(46, 0, 80, 0.3) 40%, rgba(46, 0, 80, 0.95) 100%);
+        }
+        
+        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.7); }
+        .fade-in { animation: fadeIn 0.4s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <header class="sticky top-0 w-full z-50 border-b border-white/10 bg-loyolaDarkPurple shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div onclick="goHome()" class="flex flex-col items-start cursor-pointer">
+                <h1 class="text-xl md:text-3xl font-black text-white tracking-tight drop-shadow-md whitespace-nowrap leading-tight">Revision Test</h1>
+                <span class="text-loyolaYellow text-[10px] md:text-xs font-semibold tracking-widest uppercase drop-shadow-md whitespace-nowrap mt-0.5">by Abinaya Samuel</span>
+            </div>
+            
+            <nav id="auth-nav">
+                <button onclick="openAuthModal()" class="bg-loyolaYellow hover:bg-yellow-400 text-loyolaDarkPurple font-bold px-4 md:px-6 py-2 rounded-full transition shadow-lg text-xs md:text-sm whitespace-nowrap">
+                    Create Account / Login
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div id="main-view">
+        <section class="hero-section min-h-screen flex flex-col justify-end pb-20 relative text-white -mt-20">
+            <div class="absolute inset-0 hero-overlay"></div>
+            <div class="container mx-auto px-6 relative z-10 text-center md:text-left pt-24">
+                <div class="md:w-2/3 lg:w-1/2">
+                    <span class="inline-block py-1 px-3 rounded bg-loyolaPurple/90 border border-loyolaYellow/50 text-loyolaYellow text-xs font-bold tracking-widest mb-4 shadow-lg">PREMIUM EXAM PREPARATION</span>
+                    <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight text-shadow">
+                        Your Passport to <br><span class="text-loyolaYellow">Global Success</span>
+                    </h2>
+                    <p class="text-lg md:text-xl text-white mb-8 font-medium leading-relaxed text-shadow max-w-xl">
+                        Secure your nursing career in the <strong>USA, UK, Canada, or Australia</strong>. 
+                        Enrollment for <strong>NCLEX-RN</strong> premium module is now open.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <button onclick="handleNclexClick()" class="bg-loyolaYellow text-loyolaDarkPurple hover:bg-yellow-400 font-bold py-4 px-8 rounded-lg shadow-xl transition transform hover:-translate-y-1 text-lg border-2 border-loyolaYellow">Enroll in NCLEX-RN</button>
+                        <button onclick="document.getElementById('courses-section').scrollIntoView({behavior: 'smooth'})" class="bg-black/30 backdrop-blur-md border-2 border-white text-white hover:bg-white/10 font-bold py-4 px-8 rounded-lg transition text-lg">View All Courses</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="courses-section" class="container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h3 class="text-3xl font-bold text-loyolaPurple mb-4">Exam Modules</h3>
+                <p class="text-gray-500 max-w-2xl mx-auto">Explore our competitive exam suites. Intake is strictly regulated.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="course-container">
+                </div>
+        </section>
+    </div>
+
+    <div id="nclex-dashboard" class="hidden min-h-screen bg-gray-50 pb-20 fade-in">
+        <div class="bg-loyolaPurple text-white py-12 shadow-inner">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-loyolaYellow text-loyolaDarkPurple text-xs font-bold px-2 py-1 rounded uppercase">Premium Access</span>
+                    <span class="text-green-300 text-xs font-bold uppercase tracking-widest">Enrollment Active</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold font-serif">NCLEX-RN Premium Module</h2>
+                <p class="text-gray-200 mt-2">Welcome back. Select a module to begin your preparation.</p>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 -mt-8">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-3 mb-6 border-b pb-4">
+                    <div class="p-2 bg-purple-100 rounded-lg text-loyolaPurple">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <div><h3 class="text-xl font-bold text-gray-800">Flashcards & Memory</h3><p class="text-sm text-gray-500">Master core concepts through repetition.</p></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <a href="flashcards.html" class="group relative overflow-hidden bg-gradient-to-br from-purple-500 to-loyolaPurple rounded-xl p-6 text-white shadow hover:shadow-xl transition transform hover:-translate-y-1">
+                        <div class="relative z-10"><h4 class="text-xl font-bold mb-1">Learn Mode</h4><p class="text-purple-100 text-sm">Traditional flashcards.</p></div>
+                    </a>
+                    <a href="playing.html" class="group relative overflow-hidden bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-6 text-white shadow hover:shadow-xl transition transform hover:-translate-y-1">
+                        <div class="relative z-10"><h4 class="text-xl font-bold mb-1 text-loyolaDarkPurple">Play Mode</h4><p class="text-loyolaDarkPurple/80 text-sm font-medium">Gamified learning.</p></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                <div class="flex items-center gap-3 mb-6 border-b pb-4">
+                    <div class="p-2 bg-blue-100 rounded-lg text-blue-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    </div>
+                    <div><h3 class="text-xl font-bold text-gray-800">Simulated NGN Tests</h3><p class="text-sm text-gray-500">Full-length Next Generation NCLEX mock exams.</p></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="test-grid">
+                    </div>
+            </div>
+            <button onclick="goHome()" class="mt-8 text-gray-500 hover:text-loyolaPurple font-semibold flex items-center gap-2 transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Back to Home Page</button>
+        </div>
+    </div>
+
+    <footer class="bg-loyolaDarkPurple text-white py-12 border-t border-white/10 mt-auto">
+        <div class="container mx-auto px-6 text-center">
+            <h4 class="text-xl font-bold font-serif mb-1">Revision Test</h4>
+            <p class="text-loyolaYellow text-sm font-semibold tracking-wide mb-6">by Abinaya Samuel</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-2 mb-8 text-sm text-gray-300">
+                <div class="flex items-center gap-2"><svg class="w-4 h-4 text-loyolaYellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg><span>Contact: <a href="tel:+918754955367" class="hover:text-white transition font-bold">+91 8754955367</a></span></div>
+                <span class="hidden md:inline text-gray-600">|</span>
+                <div class="flex items-center gap-2"><svg class="w-4 h-4 text-loyolaYellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><a href="mailto:revisiontestapp@gmail.com" class="hover:text-white transition font-bold">revisiontestapp@gmail.com</a></div>
+            </div>
+            <p class="text-gray-500 text-xs">&copy; 2026 Revision Test. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+            <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="flex border-b border-gray-200 mb-6">
+                <button onclick="switchAuthTab('signup')" id="tab-signup" class="flex-1 py-2 text-center font-bold text-loyolaPurple border-b-2 border-loyolaPurple">Create Account</button>
+                <button onclick="switchAuthTab('login')" id="tab-login" class="flex-1 py-2 text-center font-bold text-gray-400">Login</button>
+            </div>
+            <form id="form-signup" onsubmit="handleAuthSubmit(event, 'signup')" class="space-y-4">
+                <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name</label><input type="text" id="signup-name" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none"></div>
+                <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Email</label><input type="email" id="signup-email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none"></div>
+                <div class="relative"><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label><input type="password" id="signup-password" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none"><button type="button" onclick="togglePassword('signup-password')" class="absolute right-3 top-8 text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button></div>
+                <button type="submit" id="btn-signup" class="w-full bg-loyolaPurple hover:bg-loyolaDarkPurple text-white font-bold py-3 rounded-lg transition">Create Account</button>
+            </form>
+            <form id="form-login" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-4 hidden">
+                <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Email</label><input type="email" id="login-email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none"></div>
+                <div class="relative"><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label><input type="password" id="login-password" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none"><button type="button" onclick="togglePassword('login-password')" class="absolute right-3 top-8 text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button></div>
+                <button type="submit" id="btn-login" class="w-full bg-loyolaYellow text-loyolaDarkPurple hover:bg-yellow-400 font-bold py-3 rounded-lg transition">Login</button>
+                <div class="text-center"><button type="button" onclick="openResetModal()" class="text-xs text-loyolaPurple font-semibold hover:underline">Forgot Password?</button></div>
+            </form>
+            <p id="auth-error" class="text-red-500 text-xs text-center mt-3 hidden"></p>
+        </div>
+    </div>
+
+    <div id="reset-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+            <button onclick="closeModal('reset-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <h3 class="text-2xl font-bold text-loyolaPurple mb-4 text-center">Reset Password</h3>
+            
+            <form id="reset-stage-1" onsubmit="handleResetRequest(event)" class="space-y-4">
+                <p class="text-sm text-gray-600 text-center">Enter your registered email address. We'll send you a verification code.</p>
+                <input type="email" id="reset-email" placeholder="Email Address" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none">
+                <button type="submit" id="btn-reset-req" class="w-full bg-loyolaPurple text-white font-bold py-3 rounded-lg">Send Code</button>
+            </form>
+
+            <form id="reset-stage-2" onsubmit="handleResetConfirm(event)" class="space-y-4 hidden">
+                <p class="text-sm text-gray-600 text-center">Enter the code sent to your email and your new password.</p>
+                <input type="text" id="reset-code" placeholder="6-Digit Code" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none text-center tracking-widest font-bold">
+                <div class="relative">
+                    <input type="password" id="reset-newpass" placeholder="New Password" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-loyolaPurple outline-none">
+                    <button type="button" onclick="togglePassword('reset-newpass')" class="absolute right-3 top-3 text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                </div>
+                <button type="submit" id="btn-reset-conf" class="w-full bg-loyolaYellow text-loyolaDarkPurple font-bold py-3 rounded-lg">Update Password</button>
+            </form>
+            <p id="reset-msg" class="text-center text-xs mt-3 font-semibold"></p>
+        </div>
+    </div>
+
+    <div id="limit-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
+            <button onclick="closeModal('limit-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 text-red-600 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+                <h3 class="text-xl font-bold text-gray-900">Maximum Intake Reached</h3>
+                <p class="text-sm text-gray-500 mt-2">Currently, we are not accepting new students for <span id="limit-course-name" class="font-bold"></span>.</p>
+            </div>
+            <form onsubmit="handleWaitlist(event)" class="space-y-4"><input type="text" placeholder="Your Name" required class="w-full px-3 py-2 border rounded-md"><input type="email" placeholder="Your Email" required class="w-full px-3 py-2 border rounded-md"><button type="submit" class="w-full bg-gray-800 text-white font-bold py-2 rounded">Submit Request</button></form>
+        </div>
+    </div>
+
+    <div id="nclex-pay-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
+            <button onclick="closeModal('nclex-pay-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-loyolaPurple font-serif">NCLEX-RN Enrollment</h3>
+                <div class="mt-4 bg-loyolaLight p-4 rounded-lg border border-purple-200"><p class="text-gray-600 text-sm">Course Fee</p><span class="text-loyolaDarkPurple font-bold text-3xl">₹8,499</span></div>
+            </div>
+            <button onclick="processPayment()" class="w-full bg-loyolaYellow text-loyolaDarkPurple hover:bg-yellow-400 font-bold py-3 px-4 rounded-lg transition shadow-lg">Pay Now via Razorpay</button>
+        </div>
+    </div>
+
+    <script>
+        // PASTE YOUR NEW GOOGLE SCRIPT WEB APP URL HERE
+        const SCRIPT_URL = 'PASTE_YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE'; 
+
+        // State & Config
+        let userState = { isLoggedIn: false, email: "", name: "", isEnrolledInNclex: false };
+        const courses = [
+            { name: "NCLEX-RN", category: "Nursing", isSpecial: true },
+            { name: "NEET", category: "Medical" },
+            { name: "JEE Mains", category: "Engineering" },
+            { name: "UPSC CSE", category: "Civil Services" },
+            { name: "SSC CGL", category: "Government" },
+            { name: "SSC CHSL", category: "Government" },
+            { name: "Banking (IBPS)", category: "Banking" },
+            { name: "RRB NTPC", category: "Railways" },
+            { name: "IELTS", category: "International" }
+        ];
+
+        // --- INIT: LOAD PERSISTENT SESSION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initSession();
+            renderCourses();
+            renderTestGrid();
+        });
+
+        function getDeviceId() {
+            let id = localStorage.getItem('rt_device_id');
+            if (!id) {
+                id = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+                localStorage.setItem('rt_device_id', id);
+            }
+            return id;
+        }
+
+        function initSession() {
+            const saved = localStorage.getItem('rt_user_session');
+            if (saved) {
+                try {
+                    const session = JSON.parse(saved);
+                    userState = session;
+                    updateUIForLoggedInUser();
+                    // If they were on dashboard, stay there? Optional. For now, we update UI.
+                    if (session.isEnrolledInNclex) {
+                        document.getElementById('card-btn-nclex').innerText = "Access Course Dashboard";
+                    }
+                } catch (e) {
+                    console.error("Session Error", e);
+                }
+            }
+        }
+
+        function saveSession(data) {
+            userState = data;
+            localStorage.setItem('rt_user_session', JSON.stringify(data));
+        }
+
+        function logout() {
+            localStorage.removeItem('rt_user_session');
+            userState = { isLoggedIn: false, email: "", name: "", isEnrolledInNclex: false };
+            window.location.reload();
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderCourses() {
+            const container = document.getElementById('course-container');
+            container.innerHTML = ''; // Clear first
+            courses.forEach(course => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden flex flex-col hover:shadow-2xl transition duration-300";
+                if (course.isSpecial) {
+                    card.innerHTML = `<div class="bg-loyolaDarkPurple h-2"></div><div class="p-6 flex-grow flex flex-col"><div class="flex justify-between items-start mb-4"><span class="bg-loyolaLight text-loyolaPurple text-xs font-bold px-2 py-1 rounded">PREMIUM</span><span class="text-green-600 text-xs font-bold bg-green-50 px-2 py-1 rounded border border-green-200">OPEN</span></div><h4 class="text-2xl font-bold text-gray-800 mb-2 font-serif">${course.name}</h4><p class="text-gray-600 text-sm mb-6 flex-grow">Complete preparation for USA, UK, Canada & Australia.</p><button id="card-btn-nclex" onclick="handleNclexClick()" class="w-full bg-loyolaYellow text-loyolaDarkPurple hover:bg-yellow-400 font-bold py-3 px-4 rounded transition shadow-md">${userState.isEnrolledInNclex ? 'Access Course Dashboard' : 'Enroll Now'}</button></div>`;
+                } else {
+                    card.innerHTML = `<div class="bg-gray-200 h-2"></div><div class="p-6 flex-grow flex flex-col"><div class="flex justify-between items-start mb-4"><span class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded">${course.category}</span><span class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded border border-red-200">FULL</span></div><h4 class="text-xl font-bold text-gray-700 mb-2 font-serif">${course.name}</h4><p class="text-gray-500 text-sm mb-6 flex-grow">Maximum student intake capacity reached.</p><button onclick="openLimitModal('${course.name}')" class="w-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 font-semibold py-2 px-4 rounded transition">Check Availability</button></div>`;
+                }
+                container.appendChild(card);
+            });
+        }
+
+        function renderTestGrid() {
+            const grid = document.getElementById('test-grid');
+            grid.innerHTML = '';
+            for(let i=1; i<=10; i++) {
+                const a = document.createElement('a');
+                a.href = `test${i}.html`;
+                a.className = "flex flex-col items-center justify-center p-4 rounded-lg border-2 border-gray-100 hover:border-loyolaPurple hover:bg-purple-50 transition group";
+                a.innerHTML = `<span class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Module</span><span class="text-2xl font-black text-gray-700 group-hover:text-loyolaPurple">${i < 10 ? '0'+i : i}</span><span class="text-xs text-gray-500 mt-1">Start Test</span>`;
+                grid.appendChild(a);
+            }
+        }
+
+        // --- AUTH & RESET LOGIC ---
+        function handleAuthSubmit(e, mode) {
+            e.preventDefault();
+            const btn = document.getElementById(mode === 'signup' ? 'btn-signup' : 'btn-login');
+            const errorMsg = document.getElementById('auth-error');
+            const originalText = btn.innerText;
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+            errorMsg.classList.add('hidden');
+
+            const data = new FormData();
+            data.append('action', mode);
+            data.append('deviceId', getDeviceId()); // Send Device ID
+
+            if (mode === 'signup') {
+                data.append('name', document.getElementById('signup-name').value);
+                data.append('email', document.getElementById('signup-email').value);
+                data.append('password', document.getElementById('signup-password').value);
+            } else {
+                data.append('email', document.getElementById('login-email').value);
+                data.append('password', document.getElementById('login-password').value);
+            }
+
+            fetch(SCRIPT_URL, { method: 'POST', body: data })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        const newState = {
+                            isLoggedIn: true,
+                            email: res.email,
+                            name: res.name,
+                            isEnrolledInNclex: (res.enrolled === true || res.enrolled === "TRUE")
+                        };
+                        saveSession(newState);
+                        closeModal('auth-modal');
+                        updateUIForLoggedInUser();
+                        alert("Successfully Logged In!");
+                        // Refresh courses to update button state
+                        renderCourses();
+                    } else {
+                        errorMsg.innerText = res.message;
+                        errorMsg.classList.remove('hidden');
+                    }
+                })
+                .catch(err => { console.error(err); errorMsg.innerText = "Connection Error."; errorMsg.classList.remove('hidden'); })
+                .finally(() => { btn.innerText = originalText; btn.disabled = false; });
+        }
+
+        // Forgot Password Handlers
+        function openResetModal() {
+            closeModal('auth-modal');
+            openModal('reset-modal');
+            document.getElementById('reset-stage-1').classList.remove('hidden');
+            document.getElementById('reset-stage-2').classList.add('hidden');
+            document.getElementById('reset-msg').innerText = "";
+        }
+
+        function handleResetRequest(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-reset-req');
+            const msg = document.getElementById('reset-msg');
+            const email = document.getElementById('reset-email').value;
+            
+            btn.innerText = "Sending..."; btn.disabled = true; msg.innerText = "";
+            const data = new FormData(); data.append('action', 'forgot_req'); data.append('email', email);
+
+            fetch(SCRIPT_URL, { method: 'POST', body: data }).then(r=>r.json()).then(res => {
+                if(res.status === 'success') {
+                    document.getElementById('reset-stage-1').classList.add('hidden');
+                    document.getElementById('reset-stage-2').classList.remove('hidden');
+                    msg.innerText = "Code sent! Check your inbox."; msg.className = "text-center text-xs mt-3 font-semibold text-green-600";
+                } else {
+                    msg.innerText = res.message; msg.className = "text-center text-xs mt-3 font-semibold text-red-500";
+                }
+            }).finally(() => { btn.innerText = "Send Code"; btn.disabled = false; });
+        }
+
+        function handleResetConfirm(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-reset-conf');
+            const msg = document.getElementById('reset-msg');
+            const email = document.getElementById('reset-email').value; // from previous step
+            const code = document.getElementById('reset-code').value;
+            const newPass = document.getElementById('reset-newpass').value;
+
+            btn.innerText = "Updating..."; btn.disabled = true;
+            const data = new FormData(); 
+            data.append('action', 'reset_confirm'); data.append('email', email); 
+            data.append('code', code); data.append('newPass', newPass);
+
+            fetch(SCRIPT_URL, { method: 'POST', body: data }).then(r=>r.json()).then(res => {
+                if(res.status === 'success') {
+                    alert(res.message);
+                    closeModal('reset-modal');
+                    openAuthModal();
+                    switchAuthTab('login');
+                } else {
+                    msg.innerText = res.message; msg.className = "text-center text-xs mt-3 font-semibold text-red-500";
+                }
+            }).finally(() => { btn.innerText = "Update Password"; btn.disabled = false; });
+        }
+
+        // --- UI UTILS ---
+        function updateUIForLoggedInUser() {
+            const nav = document.getElementById('auth-nav');
+            nav.innerHTML = `<div class="flex items-center gap-4"><span class="text-white font-semibold text-xs md:text-sm drop-shadow-md whitespace-nowrap">Hi, ${userState.name}</span><button onclick="logout()" class="text-white/80 hover:text-white text-xs md:text-sm underline drop-shadow-md">Logout</button></div>`;
+            renderCourses();
+        }
+
+        function handleNclexClick() {
+            if (!userState.isLoggedIn) { openAuthModal(); }
+            else {
+                if (userState.isEnrolledInNclex) {
+                    document.getElementById('main-view').classList.add('hidden');
+                    document.getElementById('nclex-dashboard').classList.remove('hidden');
+                    window.scrollTo(0,0);
+                } else { openModal('nclex-pay-modal'); }
+            }
+        }
+
+        function goHome() {
+            document.getElementById('nclex-dashboard').classList.add('hidden');
+            document.getElementById('main-view').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function togglePassword(id) { const el = document.getElementById(id); el.type = el.type === 'password' ? 'text' : 'password'; }
+        function switchAuthTab(mode) {
+            const signup = document.getElementById('form-signup'), login = document.getElementById('form-login');
+            const tSign = document.getElementById('tab-signup'), tLog = document.getElementById('tab-login');
+            document.getElementById('auth-error').classList.add('hidden');
+            if (mode === 'signup') {
+                signup.classList.remove('hidden'); login.classList.add('hidden');
+                tSign.classList.add('text-loyolaPurple', 'border-b-2', 'border-loyolaPurple'); tSign.classList.remove('text-gray-400');
+                tLog.classList.remove('text-loyolaPurple', 'border-b-2', 'border-loyolaPurple'); tLog.classList.add('text-gray-400');
+            } else {
+                signup.classList.add('hidden'); login.classList.remove('hidden');
+                tLog.classList.add('text-loyolaPurple', 'border-b-2', 'border-loyolaPurple'); tLog.classList.remove('text-gray-400');
+                tSign.classList.remove('text-loyolaPurple', 'border-b-2', 'border-loyolaPurple'); tSign.classList.add('text-gray-400');
+            }
+        }
+        function openAuthModal() { openModal('auth-modal'); switchAuthTab('signup'); }
+        function openLimitModal(name) { document.getElementById('limit-course-name').innerText = name; openModal('limit-modal'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+        function openModal(id) { const el = document.getElementById(id); el.classList.remove('hidden'); el.classList.add('flex'); }
+        function handleWaitlist(e) { e.preventDefault(); closeModal('limit-modal'); alert("Request Submitted."); }
+        function processPayment() { window.open('https://abiconsultancy.razorpay.com', '_blank'); closeModal('nclex-pay-modal'); alert("Payment initiated. Access will be activated shortly."); }
+    </script>
+</body>
+</html>
