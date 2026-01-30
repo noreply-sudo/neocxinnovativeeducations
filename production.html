@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>February 2026 Content Calendar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .platform-badge {
+            transition: all 0.3s ease;
+        }
+        
+        /* Custom scrollbar for individual day cells if content gets too long */
+        .day-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .day-content::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .day-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen pb-20">
+
+    <div class="sticky top-0 z-50 bg-white shadow-md border-b border-gray-200">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">February 2026</h1>
+                    <p class="text-sm text-gray-500">Social Media Content Calendar</p>
+                </div>
+                
+                <div class="flex bg-gray-100 p-1 rounded-lg">
+                    <button onclick="filterPlatform('all')" id="btn-all" class="filter-btn px-4 py-2 text-sm font-medium rounded-md bg-white text-gray-900 shadow-sm transition-all">All</button>
+                    <button onclick="filterPlatform('youtube')" id="btn-youtube" class="filter-btn px-4 py-2 text-sm font-medium rounded-md text-gray-500 hover:text-red-600 transition-all flex items-center gap-2"><i class="fab fa-youtube"></i> YouTube</button>
+                    <button onclick="filterPlatform('facebook')" id="btn-facebook" class="filter-btn px-4 py-2 text-sm font-medium rounded-md text-gray-500 hover:text-blue-600 transition-all flex items-center gap-2"><i class="fab fa-facebook"></i> Facebook</button>
+                    <button onclick="filterPlatform('instagram')" id="btn-instagram" class="filter-btn px-4 py-2 text-sm font-medium rounded-md text-gray-500 hover:text-pink-600 transition-all flex items-center gap-2"><i class="fab fa-instagram"></i> Instagram</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-[95%] mx-auto mt-8 space-y-12">
+
+        <div class="week-section">
+            <div class="flex items-center gap-4 mb-4">
+                <span class="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Week 1</span>
+                <div class="h-px bg-gray-300 flex-grow"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+                <div class="hidden lg:block font-semibold text-center text-gray-400 text-sm pb-2">SUN</div>
+                <div class="hidden lg:block font-semibold text-center text-gray-400 text-sm pb-2">MON</div>
+                <div class="hidden lg:block font-semibold text-center text-gray-400 text-sm pb-2">TUE</div>
+                <div class="hidden lg:block font-semibold text-center text-gray-400 text-sm pb-2">WED</div>
+                <div class="hidden lg:block font-semibold text-center text-gray-400 text-sm pb-2">THU</div>
+                <div class="hidden lg:block font-semibold text-center text-gray-400 text-sm pb-2">FRI</div>
+                <div class="hidden lg:block font-semibold text-center text-gray-400 text-sm pb-2">SAT</div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full min-h-[300px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-bold text-gray-700">1 Feb</span>
+                        <span class="text-xs text-gray-400 lg:hidden">Sunday</span>
+                    </div>
+                    <div class="p-3 space-y-2 day-content overflow-y-auto">
+                        <div class="item youtube p-2 rounded-lg bg-red-50 border-l-4 border-red-500">
+                            <div class="text-[10px] font-bold text-red-600 mb-1 flex items-center gap-1"><i class="fab fa-youtube"></i> YOUTUBE</div>
+                            <p class="text-xs text-gray-800 font-medium">Troll Video</p>
+                            <span class="text-[10px] text-gray-500 bg-white px-1 rounded">5:30 PM</span>
+                        </div>
+                        <div class="item facebook p-2 rounded-lg bg-blue-50 border-l-4 border-blue-500">
+                            <div class="text-[10px] font-bold text-blue-600 mb-1 flex items-center gap-1"><i class="fab fa-facebook"></i> FACEBOOK</div>
+                            <p class="text-xs text-gray-800 font-medium">Troll Video</p>
+                        </div>
+                        <div class="item instagram p-2 rounded-lg bg-pink-50 border-l-4 border-pink-500">
+                            <div class="text-[10px] font-bold text-pink-600 mb-1 flex items-center gap-1"><i class="fab fa-instagram"></i> INSTAGRAM</div>
+                            <p class="text-xs text-gray-800 font-medium">Troll Video</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full min-h-[300px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-bold text-gray-700">2 Feb</span>
+                        <span class="text-xs text-gray-400 lg:hidden">Monday</span>
+                    </div>
+                    <div class="p-3 space-y-2 day-content overflow-y-auto">
+                         <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200">
+                            <div class="flex gap-2 mb-1 opacity-70">
+                                <i class="fab fa-youtube text-red-500 text-xs"></i>
+                                <i class="fab fa-facebook text-blue-500 text-xs"></i>
+                                <i class="fab fa-instagram text-pink-500 text-xs"></i>
+                            </div>
+                            <p class="text-xs text-gray-800 font-bold mb-1">1. Poster: Ezi Nurse AD</p>
+                            <span class="text-[10px] text-gray-500 block">11:00 AM</span>
+                            <div class="h-px bg-gray-200 my-1"></div>
+                            <p class="text-xs text-gray-800 font-bold mb-1">2. AD: Aditya</p>
+                            <span class="text-[10px] text-gray-500 block">5:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full min-h-[300px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-bold text-gray-700">3 Feb</span>
+                        <span class="text-xs text-gray-400 lg:hidden">Tuesday</span>
+                    </div>
+                    <div class="p-3 space-y-2 day-content overflow-y-auto">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200">
+                             <div class="flex gap-2 mb-1 opacity-70">
+                                <i class="fab fa-youtube text-red-500 text-xs"></i>
+                                <i class="fab fa-facebook text-blue-500 text-xs"></i>
+                                <i class="fab fa-instagram text-pink-500 text-xs"></i>
+                            </div>
+                            <p class="text-xs text-gray-800 font-bold">Content Video: Dheena</p>
+                            <span class="text-[10px] text-gray-500">5:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full min-h-[300px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-bold text-gray-700">4 Feb</span>
+                        <span class="text-xs text-gray-400 lg:hidden">Wednesday</span>
+                    </div>
+                    <div class="p-3 space-y-2 day-content overflow-y-auto">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-purple-50 border-l-4 border-purple-500">
+                             <div class="flex gap-2 mb-1 opacity-70">
+                                <i class="fab fa-youtube text-red-500 text-xs"></i>
+                                <i class="fab fa-facebook text-blue-500 text-xs"></i>
+                                <i class="fab fa-instagram text-pink-500 text-xs"></i>
+                            </div>
+                            <p class="text-xs text-purple-900 font-bold">World Cancer Day Poster</p>
+                            <span class="text-[10px] text-purple-600 block mb-2">11:00 AM</span>
+                            
+                            <p class="text-xs text-gray-800 font-bold">Reel</p>
+                            <span class="text-[10px] text-gray-500">5:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full min-h-[300px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-bold text-gray-700">5 Feb</span>
+                        <span class="text-xs text-gray-400 lg:hidden">Thursday</span>
+                    </div>
+                    <div class="p-3 space-y-2 day-content overflow-y-auto">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200">
+                             <div class="flex gap-2 mb-1 opacity-70">
+                                <i class="fab fa-youtube text-red-500 text-xs"></i>
+                                <i class="fab fa-facebook text-blue-500 text-xs"></i>
+                                <i class="fab fa-instagram text-pink-500 text-xs"></i>
+                            </div>
+                            <p class="text-xs text-gray-800 font-bold">Troll Video</p>
+                            <span class="text-[10px] text-gray-500">5:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full min-h-[300px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-bold text-gray-700">6 Feb</span>
+                        <span class="text-xs text-gray-400 lg:hidden">Friday</span>
+                    </div>
+                    <div class="p-3 space-y-2 day-content overflow-y-auto">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-pink-50 border border-pink-100">
+                            <div class="flex gap-2 mb-1 opacity-70">
+                                <i class="fab fa-youtube text-red-500 text-xs"></i>
+                                <i class="fab fa-facebook text-blue-500 text-xs"></i>
+                                <i class="fab fa-instagram text-pink-500 text-xs"></i>
+                            </div>
+                            <p class="text-xs text-pink-800 font-bold mb-1">Poster: Valentine Week</p>
+                            <span class="text-[10px] text-gray-500 block mb-2">11:00 AM</span>
+                            
+                            <div class="h-px bg-pink-200 my-1"></div>
+                            
+                            <p class="text-xs text-gray-800 font-bold">Guess The Disease</p>
+                            <span class="text-[10px] text-gray-500">Video @ 5:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full min-h-[300px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                        <span class="font-bold text-gray-700">7 Feb</span>
+                        <span class="text-xs text-gray-400 lg:hidden">Saturday</span>
+                    </div>
+                    <div class="p-3 space-y-2 day-content overflow-y-auto">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-yellow-50 border-l-4 border-yellow-400">
+                            <div class="flex gap-2 mb-1 opacity-70">
+                                <i class="fab fa-youtube text-red-500 text-xs"></i>
+                                <i class="fab fa-facebook text-blue-500 text-xs"></i>
+                                <i class="fab fa-instagram text-pink-500 text-xs"></i>
+                            </div>
+                            <p class="text-xs text-gray-800 font-bold">Ad Video: Kowstab</p>
+                            <span class="text-[10px] text-gray-500">5:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="week-section">
+            <div class="flex items-center gap-4 mb-4">
+                <span class="bg-teal-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Week 2</span>
+                <div class="h-px bg-gray-300 flex-grow"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">8 Feb</span><span class="text-xs text-gray-400 lg:hidden">Sunday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Reels</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">9 Feb</span><span class="text-xs text-gray-400 lg:hidden">Monday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-amber-50 border-l-4 border-amber-600">
+                             <p class="text-xs font-bold text-amber-900">Chocolate Day Poster</p><span class="text-[10px] text-amber-700">11:00 AM</span>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Reels</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">10 Feb</span><span class="text-xs text-gray-400 lg:hidden">Tuesday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-yellow-50 border border-yellow-200"><p class="text-xs font-bold">Ad Video: Dheena</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">11 Feb</span><span class="text-xs text-gray-400 lg:hidden">Wednesday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-indigo-50 border-l-4 border-indigo-400">
+                             <p class="text-xs font-bold text-indigo-900">Promise Day Poster</p><span class="text-[10px] text-indigo-700">11:00 AM</span>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Content Video: Promise Day</p></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">12 Feb</span><span class="text-xs text-gray-400 lg:hidden">Thursday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Troll Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">13 Feb</span><span class="text-xs text-gray-400 lg:hidden">Friday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border-l-4 border-green-500">
+                            <p class="text-xs font-bold">Poster: Ezi Nurse</p><span class="text-[10px]">11:00 AM</span>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Guess The Disease</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-red-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-red-50 px-4 py-2 border-b border-red-100 flex justify-between items-center"><span class="font-bold text-red-700">14 Feb <i class="fas fa-heart text-xs"></i></span><span class="text-xs text-red-400 lg:hidden">Saturday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-red-100 border border-red-300">
+                            <p class="text-xs font-bold text-red-900">Valentines Day Video</p><span class="text-[10px] text-red-700">5:30 PM</span>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-red-50"><p class="text-xs font-bold">Poster</p><span class="text-[10px]">11:00 AM</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="week-section">
+            <div class="flex items-center gap-4 mb-4">
+                <span class="bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Week 3</span>
+                <div class="h-px bg-gray-300 flex-grow"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+                
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">15 Feb</span><span class="text-xs text-gray-400 lg:hidden">Sunday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Troll Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">16 Feb</span><span class="text-xs text-gray-400 lg:hidden">Monday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-red-50 border-l-4 border-red-400">
+                            <p class="text-xs font-bold">Poster: Cardiac Rehab Week</p>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Content: Kowstab</p></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">17 Feb</span><span class="text-xs text-gray-400 lg:hidden">Tuesday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Reel</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">18 Feb</span><span class="text-xs text-gray-400 lg:hidden">Wednesday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Poster: Ezi Nurse</p><span class="text-[10px]">11:00 AM</span></div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Guess The Disease</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">19 Feb</span><span class="text-xs text-gray-400 lg:hidden">Thursday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Troll Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">20 Feb</span><span class="text-xs text-gray-400 lg:hidden">Friday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-blue-50 border-l-4 border-blue-400">
+                            <p class="text-xs font-bold">Poster: Social Justice</p><span class="text-[10px]">11:00 AM</span>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-purple-50 border border-purple-200"><p class="text-xs font-bold text-purple-800">AI AD Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">21 Feb</span><span class="text-xs text-gray-400 lg:hidden">Saturday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Reel</p><span class="text-[10px]">5:40 PM</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="week-section">
+            <div class="flex items-center gap-4 mb-4">
+                <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Week 4</span>
+                <div class="h-px bg-gray-300 flex-grow"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+                
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">22 Feb</span><span class="text-xs text-gray-400 lg:hidden">Sunday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Reel</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">23 Feb</span><span class="text-xs text-gray-400 lg:hidden">Monday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Content Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">24 Feb</span><span class="text-xs text-gray-400 lg:hidden">Tuesday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-green-50 border-l-4 border-green-500">
+                            <p class="text-xs font-bold">Poster: Patient Care</p><span class="text-[10px]">11:00 AM</span>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-purple-50"><p class="text-xs font-bold">AI AD Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">25 Feb</span><span class="text-xs text-gray-400 lg:hidden">Wednesday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Guess The Disease</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">26 Feb</span><span class="text-xs text-gray-400 lg:hidden">Thursday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Poster: Ezi Nurse</p><span class="text-[10px]">11:00 AM</span></div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Content Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">27 Feb</span><span class="text-xs text-gray-400 lg:hidden">Friday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50 border border-gray-200"><p class="text-xs font-bold">Troll Video</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-full min-h-[250px]">
+                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-gray-700">28 Feb</span><span class="text-xs text-gray-400 lg:hidden">Saturday</span></div>
+                    <div class="p-3 space-y-2 day-content">
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-rose-50 border-l-4 border-rose-500">
+                            <p class="text-xs font-bold text-rose-900">Rare Disease Poster</p><span class="text-[10px]">11:00 AM</span>
+                        </div>
+                        <div class="item youtube facebook instagram p-2 rounded-lg bg-gray-50"><p class="text-xs font-bold">Reel</p><span class="text-[10px]">5:30 PM</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function filterPlatform(platform) {
+            // Update buttons state
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if (btn.id === `btn-${platform}`) {
+                    btn.classList.remove('bg-white', 'text-gray-500');
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-gray-300', 'bg-white', 'shadow-sm');
+                    if(platform === 'youtube') btn.classList.add('text-red-600');
+                    if(platform === 'facebook') btn.classList.add('text-blue-600');
+                    if(platform === 'instagram') btn.classList.add('text-pink-600');
+                    if(platform === 'all') btn.classList.add('text-gray-900', 'font-bold');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-offset-2', 'ring-gray-300', 'text-red-600', 'text-blue-600', 'text-pink-600', 'font-bold', 'text-gray-900');
+                    btn.classList.add('text-gray-500');
+                }
+            });
+
+            const items = document.querySelectorAll('.item');
+            
+            items.forEach(item => {
+                if (platform === 'all') {
+                    item.style.display = 'block';
+                } else {
+                    if (item.classList.contains(platform)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+        
+        // Init with all
+        filterPlatform('all');
+    </script>
+</body>
+</html>
